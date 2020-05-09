@@ -9,31 +9,28 @@ namespace NunitTest
   [TestFixture]
   public class ToDoTest
   {
-    private readonly ToDoDbContext _context;
     private readonly ToDosRepo _todoRepo;
+    private readonly ToDosController _todoController;
 
     public ToDoTest( ToDoDbContext context )
     {
-      _context = context;
       _todoRepo = new ToDosRepo( context );
+      _todoController = new ToDosController( context );
     }
 
     public ToDo AddEntry( DateTime date )
     {
-      var controller = new ToDosController( _context );
       var todoItem = new ToDo() { CreatedDate = date, ExpiredDate = date.AddDays( 1 ), Title = "Entry test", Description = "Entry test description", CompletenessPercentage = 0 };
 
-      return controller.AddToDoItem( todoItem ).Value;
+      return _todoController.AddToDoItem( todoItem ).Value;
     }
 
     [TestCase]
     public void Test_Add_Entry()
     {
-      var controller = new ToDosController( _context );
-
       var todo = new ToDo() { CreatedDate = DateTime.Now, ExpiredDate = DateTime.Now.AddDays( 1 ), Title = "Entry test", Description = "Entry test description", CompletenessPercentage = 0 };
 
-      var result = controller.AddToDoItem( todo );
+      var result = _todoController.AddToDoItem( todo );
 
       Assert.Equals( todo.Title, result.Value.Title );
 
@@ -44,8 +41,7 @@ namespace NunitTest
     public void Test_Get( ToDoDbContext context )
     {
       var entry = AddEntry( DateTime.Now );
-      var controller = new ToDosController( _context );
-      var result = controller.GetToDos();
+      var result = _todoController.GetToDos();
 
       Assert.Equals( result.Value.Count(), 1 );
 
@@ -56,12 +52,11 @@ namespace NunitTest
     public void Test_Update( ToDoDbContext context )
     {
       var entry = AddEntry( DateTime.Now );
-      var controller = new ToDosController( _context );
-
       var newEntry = new ToDo() { CreatedDate = entry.CreatedDate, ExpiredDate = entry.ExpiredDate, Title = "Entry update test", Description = "Entry update test description", CompletenessPercentage = entry.CompletenessPercentage };
 
-      controller.PutToDoItem( entry.Id, newEntry );
-      var result = controller.GetToDoById( entry.Id );
+      _todoController.PutToDoItem( entry.Id, newEntry );
+      var result = _todoController.GetToDoById( entry.Id );
+
       Assert.Equals( result.Value.Title, newEntry.Title );
 
       _todoRepo.Delete( entry );
@@ -71,9 +66,7 @@ namespace NunitTest
     public void Test_Delete( ToDoDbContext context )
     {
       var entry = AddEntry( DateTime.Now );
-      var controller = new ToDosController( _context );
-
-      var result = controller.DeleteToDoItem( entry.Id );
+      var result = _todoController.DeleteToDoItem( entry.Id );
 
       Assert.Equals( result.Value.Title, entry.Title );
     }
@@ -85,8 +78,7 @@ namespace NunitTest
       var entry2 = AddEntry( DateTime.Now );
       var entry3 = AddEntry( DateTime.Now );
 
-      var controller = new ToDosController( _context );
-      var result = controller.GetByDate( DateRangeEnum.TODAY.ToString() );
+      var result = _todoController.GetByDate( DateRangeEnum.TODAY.ToString() );
 
       Assert.Equals( result.Value.Count(), 3 );
 
@@ -102,8 +94,7 @@ namespace NunitTest
       var entry2 = AddEntry( DateTime.Now.AddDays( 1 ) );
       var entry3 = AddEntry( DateTime.Now.AddDays( 1 ) );
 
-      var controller = new ToDosController( _context );
-      var result = controller.GetByDate( DateRangeEnum.TOMORROW.ToString() );
+      var result = _todoController.GetByDate( DateRangeEnum.TOMORROW.ToString() );
 
       Assert.Equals( result.Value.Count(), 3 );
 
@@ -122,8 +113,7 @@ namespace NunitTest
       var entry2 = AddEntry( sunday.AddDays( 2 ) );
       var entry3 = AddEntry( saturday );
 
-      var controller = new ToDosController( _context );
-      var result = controller.GetByDate( DateRangeEnum.THISWEEK.ToString() );
+      var result = _todoController.GetByDate( DateRangeEnum.THISWEEK.ToString() );
 
       Assert.Equals( result.Value.Count(), 3 );
 
@@ -136,9 +126,7 @@ namespace NunitTest
     public void Test_UpdateCompletenessPercentage( ToDoDbContext context )
     {
       var entry1 = AddEntry( DateTime.Now );
-      
-      var controller = new ToDosController( _context );
-      var result = controller.Complete( entry1.Id, 50 );
+      var result = _todoController.Complete( entry1.Id, 50 );
 
       Assert.Equals( result.Value.CompletenessPercentage, 50 );
 
@@ -149,9 +137,7 @@ namespace NunitTest
     public void Test_UpdateCompleteDone( ToDoDbContext context )
     {
       var entry1 = AddEntry( DateTime.Now );
-
-      var controller = new ToDosController( _context );
-      var result = controller.Complete( entry1.Id );
+      var result = _todoController.Complete( entry1.Id );
 
       // done entry would has completenessPercentage 100
       Assert.Equals( result.Value.CompletenessPercentage, 100 );
