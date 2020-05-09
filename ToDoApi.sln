@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.1082
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoApi", "ToDoApi\ToDoApi.csproj", "{D71438D2-0FC3-4872-8E7A-9977CC944E28}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NunitTest", "NunitTest\NunitTest.csproj", "{F9C78CDD-CB80-4C21-BC3E-388CA7CEA353}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{D71438D2-0FC3-4872-8E7A-9977CC944E28}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D71438D2-0FC3-4872-8E7A-9977CC944E28}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D71438D2-0FC3-4872-8E7A-9977CC944E28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9C78CDD-CB80-4C21-BC3E-388CA7CEA353}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9C78CDD-CB80-4C21-BC3E-388CA7CEA353}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9C78CDD-CB80-4C21-BC3E-388CA7CEA353}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9C78CDD-CB80-4C21-BC3E-388CA7CEA353}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
