@@ -49,18 +49,18 @@ namespace ToDoApi.Models
       _context.SaveChanges();
     }
 
-    public void Delete( ToDo todo )
-    {
-      _context.ToDoItems.Remove( todo );
-      _context.SaveChanges();
-    }
-
     public void Update( int id, int completenessPercentage )
     {
       var todo = Get( id );
 
       todo.CompletenessPercentage = completenessPercentage;
       _context.Entry( todo ).State = EntityState.Modified;
+      _context.SaveChanges();
+    }
+
+    public void Delete( ToDo todo )
+    {
+      _context.ToDoItems.Remove( todo );
       _context.SaveChanges();
     }
   }

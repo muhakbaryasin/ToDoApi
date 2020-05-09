@@ -18,6 +18,7 @@ namespace ToDoApi.Controllers
       _todoRepo = new ToDosRepo( context );
     }
 
+    /* return all To Do(es) */
     //GET: api/todos
     [HttpGet]
     public ActionResult<IEnumerable<ToDo>> GetToDos()
@@ -25,6 +26,7 @@ namespace ToDoApi.Controllers
       return _todoRepo.Get();
     }
 
+    /* return a To Do by Id */
     //GET: api/todos/n
     [HttpGet( "{id}" )]
     public ActionResult<ToDo> GetToDoById( int id )
@@ -37,6 +39,7 @@ namespace ToDoApi.Controllers
       return toDoItem;
     }
 
+    /* add a To Do */
     //POST: api/todos
     [HttpPost]
     public ActionResult<ToDo> AddToDoItem( ToDo todo )
@@ -46,6 +49,7 @@ namespace ToDoApi.Controllers
       return CreatedAtAction( "GetToDoById", new ToDo { Id = todoR.Id }, todoR );
     }
 
+    /* update a To Do by Id */
     //PUT: api/todos/n
     [HttpPut( "{id}" )]
     public ActionResult PutToDoItem( int id, ToDo todo )
@@ -63,6 +67,7 @@ namespace ToDoApi.Controllers
       return NoContent();
     }
 
+    /* delete a To Do by Id */
     //DELETE: api/todos/n
     [HttpDelete( "{id}" )]
     public ActionResult<ToDo> DeleteToDoItem( int id )
@@ -77,7 +82,8 @@ namespace ToDoApi.Controllers
       return todoItem;
     }
 
-    //GET: api/todos/n
+    /* get all To Do(es) in range of date */
+    //GET: api/todos/getbydate/daterangeenum
     [Route( "[action]/{dateRangeType}" )]
     [HttpGet]
     public ActionResult<IEnumerable<ToDo>> GetByDate( string dateRangeType )
@@ -109,6 +115,8 @@ namespace ToDoApi.Controllers
       return toDoItems.ToList();
     }
 
+    /* update a To Do completeness percentage by Id */
+    //PUT: api/todos/complete/n/value/n
     [Route( "[action]/{id}/value/{percentage}" )]
     [HttpPut]
     public ActionResult<ToDo> Complete(int id, int percentage)
@@ -123,6 +131,8 @@ namespace ToDoApi.Controllers
       return _todoRepo.Get( id );
     }
 
+    /* update a To Do completeness percentage to 100 by Id */
+    //PUT: api/todos/complete/n/
     [Route( "[action]/{id}" )]
     [HttpPut]
     public ActionResult<ToDo> Complete( int id )
@@ -132,6 +142,7 @@ namespace ToDoApi.Controllers
       if( todoItem == null )
         return NotFound();
 
+      // progress DONE means 100 completeness
       _todoRepo.Update( id, 100 );
 
       return _todoRepo.Get( id );
