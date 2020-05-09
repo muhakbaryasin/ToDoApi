@@ -109,5 +109,33 @@ namespace ToDoApi.Controllers
       return toDoItems.ToList();
     }
 
+    [Route( "[action]/{id}/value/{percentage}" )]
+    [HttpPut]
+    public ActionResult<ToDo> Complete(int id, int percentage)
+    {
+      var todoItem = _todoRepo.Get( id );
+
+      if( todoItem == null )
+        return NotFound();
+
+      _todoRepo.Update( id, percentage );
+
+      return _todoRepo.Get( id );
+    }
+
+    [Route( "[action]/{id}" )]
+    [HttpPut]
+    public ActionResult<ToDo> Complete( int id )
+    {
+      var todoItem = _todoRepo.Get( id );
+
+      if( todoItem == null )
+        return NotFound();
+
+      _todoRepo.Update( id, 100 );
+
+      return _todoRepo.Get( id );
+    }
+
   }
 }
