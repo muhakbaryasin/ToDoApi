@@ -14,7 +14,7 @@ namespace NunitTest
 
     public ToDoTest( ToDoDbContext context )
     {
-      //_context = context;
+      _context = context;
       _todoRepo = new ToDosRepo( context );
     }
 
@@ -130,6 +130,33 @@ namespace NunitTest
       _todoRepo.Delete( entry1 );
       _todoRepo.Delete( entry2 );
       _todoRepo.Delete( entry3 );
+    }
+
+    [TestCase]
+    public void Test_UpdateCompletenessPercentage( ToDoDbContext context )
+    {
+      var entry1 = AddEntry( DateTime.Now );
+      
+      var controller = new ToDosController( _context );
+      var result = controller.Complete( entry1.Id, 50 );
+
+      Assert.Equals( result.Value.CompletenessPercentage, 50 );
+
+      _todoRepo.Delete( entry1 );
+    }
+
+    [TestCase]
+    public void Test_UpdateCompleteDone( ToDoDbContext context )
+    {
+      var entry1 = AddEntry( DateTime.Now );
+
+      var controller = new ToDosController( _context );
+      var result = controller.Complete( entry1.Id );
+
+      // done entry would has completenessPercentage 100
+      Assert.Equals( result.Value.CompletenessPercentage, 100 );
+
+      _todoRepo.Delete( entry1 );
     }
   }
 }
