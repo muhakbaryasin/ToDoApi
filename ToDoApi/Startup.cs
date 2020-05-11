@@ -24,8 +24,10 @@ namespace ToDoApi
     // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
     public void ConfigureServices( IServiceCollection services )
     {
+      var connectionString = $"Data Source={Configuration["Database:Docker:Server"]},{Configuration["Database:Docker:Port"]};Initial Catalog={Configuration["Database:Docker:DBName"]};User ID={Configuration["Database:Docker:User"]};Password={Configuration["Database:Docker:Password"]};";
+
       services.AddDbContext<ToDoDbContext>
-        ( opt => opt.UseSqlServer( Configuration["Data:ToDoAPIConnection:ConnectionString"] ) );
+        ( opt => opt.UseSqlServer( connectionString ) );
       services.AddMvc().SetCompatibilityVersion( CompatibilityVersion.Version_2_2 );
     }
 
@@ -38,6 +40,7 @@ namespace ToDoApi
       }
 
       app.UseMvc();
+      DbPrepare.PrepPopulation( app );
     }
   }
 }
