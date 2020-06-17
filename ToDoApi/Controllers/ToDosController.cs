@@ -18,16 +18,18 @@ namespace ToDoApi.Controllers
       _todoRepo = new ToDosRepo( context );
     }
 
-    /* return all To Do(es) */
-    //GET: api/todos
+    /// <summary>
+    /// return all To Do(es)
+    /// </summary>
     [HttpGet]
     public ActionResult<IEnumerable<ToDo>> GetToDos()
     {
       return _todoRepo.Get();
     }
 
-    /* return a To Do by Id */
-    //GET: api/todos/n
+    /// <summary>
+    /// return a To Do by Id
+    /// </summary>
     [HttpGet( "{id}" )]
     public ActionResult<ToDo> GetToDoById( int id )
     {
@@ -39,8 +41,9 @@ namespace ToDoApi.Controllers
       return toDoItem;
     }
 
-    /* add a To Do */
-    //POST: api/todos
+    /// <summary>
+    /// add a To Do
+    /// </summary>
     [HttpPost]
     public ActionResult<ToDo> AddToDoItem( ToDo todo )
     {
@@ -49,8 +52,9 @@ namespace ToDoApi.Controllers
       return CreatedAtAction( "GetToDoById", new ToDo { Id = todoR.Id }, todoR );
     }
 
-    /* update a To Do by Id */
-    //PUT: api/todos/n
+    /// <summary>
+    /// update a To Do by Id
+    /// </summary>
     [HttpPut( "{id}" )]
     public ActionResult PutToDoItem( int id, ToDo todo )
     {
@@ -67,8 +71,9 @@ namespace ToDoApi.Controllers
       return NoContent();
     }
 
-    /* delete a To Do by Id */
-    //DELETE: api/todos/n
+    /// <summary>
+    /// delete a To Do by Id
+    /// </summary>
     [HttpDelete( "{id}" )]
     public ActionResult<ToDo> DeleteToDoItem( int id )
     {
@@ -82,9 +87,10 @@ namespace ToDoApi.Controllers
       return todoItem;
     }
 
-    /* get all To Do(es) in range of date */
-    //GET: api/todos/getbydate/daterangeenum
     [Route( "[action]/{dateRangeType}" )]
+    /// <summary>
+    /// get all To Do(es) in range of date
+    /// <summary>
     [HttpGet]
     public ActionResult<IEnumerable<ToDo>> GetByDate( string dateRangeType )
     {
@@ -115,9 +121,10 @@ namespace ToDoApi.Controllers
       return toDoItems.ToList();
     }
 
-    /* update a To Do completeness percentage by Id */
-    //PUT: api/todos/complete/n/value/n
     [Route( "[action]/{id}/value/{percentage}" )]
+    /// <summary>
+    /// update a To Do completeness percentage by Id
+    /// <summary>
     [HttpPut]
     public ActionResult<ToDo> Complete(int id, int percentage)
     {
@@ -131,9 +138,10 @@ namespace ToDoApi.Controllers
       return _todoRepo.Get( id );
     }
 
-    /* update a To Do completeness percentage to 100 by Id */
-    //PUT: api/todos/complete/n/
     [Route( "[action]/{id}" )]
+    /// <summary>
+    /// update a To Do completeness percentage to 100 by Id */
+    /// <summary>
     [HttpPut]
     public ActionResult<ToDo> Complete( int id )
     {

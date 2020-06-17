@@ -5,7 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using ToDoApi.Models;
-
+using ToDoApi.Options;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
+using System.IO;
+using System;
 
 namespace ToDoApi
 {
@@ -29,6 +33,16 @@ namespace ToDoApi
       services.AddDbContext<ToDoDbContext>
         ( opt => opt.UseSqlServer( connectionString ) );
       services.AddMvc().SetCompatibilityVersion( CompatibilityVersion.Version_2_2 );
+
+      services.AddSwaggerGen( x => {
+        x.SwaggerDoc( "v1", new OpenApiInfo { Title = "Application name", Version = "v1" } );
+
+        var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        var xmlPath = Path.Combine( AppContext.BaseDirectory, xmlFile );
+
+        x.IncludeXmlComments( xmlPath, includeControllerXmlComments: true );
+
+      } );
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -38,6 +52,21 @@ namespace ToDoApi
       {
         app.UseDeveloperExceptionPage();
       }
+
+      var swaggerOptions = new SwaggerOptions();
+      Configuration.GetSection( nameof( SwaggerOptions )).Bind( swaggerOptions );
+
+      app.UseSwagger();
+      /*
+      app.UseSwagger( option =>
+      {
+        option.RouteTemplate = swaggerOptions.JsonRoute;
+      });
+      */
+
+      app.UseSwaggerUI( option => {
+        option.SwaggerEndpoint( swaggerOptions.UiEndpoint, swaggerOptions.Description );
+      });
 
       app.UseMvc();
       DbPrepare.PrepPopulation( app );
