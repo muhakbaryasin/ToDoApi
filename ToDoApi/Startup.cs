@@ -32,7 +32,7 @@ namespace ToDoApi
 
       services.AddDbContext<ToDoDbContext>
         ( opt => opt.UseSqlServer( connectionString ) );
-      services.AddMvc().SetCompatibilityVersion( CompatibilityVersion.Version_2_2 );
+      services.AddMvc().SetCompatibilityVersion( CompatibilityVersion.Version_2_1 );
 
       services.AddSwaggerGen( x => {
         x.SwaggerDoc( "v1", new OpenApiInfo { Title = "Application name", Version = "v1" } );
